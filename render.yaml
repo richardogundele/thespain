@@ -1,6 +1,6 @@
 services:
   # A Docker web service
-  - type: api
+  - type: web
     name: thespian-backend
     runtime: python
     plan: free
