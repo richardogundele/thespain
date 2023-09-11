@@ -2,8 +2,6 @@ import requests, os, openai, pymongo
 # from decouple import config
 import dotenv
 
-dotenv.load_dotenv()
-
 openai.api_key = os.getenv("OPEN_AI_KEY")
 
 ELEVEN_LABS_API_KEY = os.getenv("ELEVEN_LABS_API_KEY")
