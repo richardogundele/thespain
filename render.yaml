@@ -1,7 +1,7 @@
 services:
   # A Docker web service
-  - type: web
-    name: fastapi-example
+  - type: api
+    name: thespian-backend
     runtime: python
     plan: free
     autoDeploy: false
