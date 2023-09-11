@@ -39,7 +39,7 @@ tqdm==4.66.1
 typing_extensions==4.7.1
 ujson==5.7.0
 urllib3==2.0.4
-uvicorn==0.23.2
+uvicorn==0.22.0
 watchfiles==0.20.0
 websockets==11.0.3
 yarl==1.9.2
