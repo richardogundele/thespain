@@ -27,7 +27,7 @@ app.add_middleware(
                    )
 @app.get("/")
 def read_root():
-    return {"ThespAIn": "/text /speech"}
+    return {"ThespAIn": "/text /speech /itworking"}
            
 #get history
 @app.post("/history")
@@ -39,8 +39,6 @@ async def history():
 @app.post("/text")
 async def post_text(textinput):
     message = text_to_text_response(textinput)
-    if not message:
-        return HTTPException("failed to get message from GPT API")
     return message
 
 #get speech
