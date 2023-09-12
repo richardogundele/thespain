@@ -10,13 +10,14 @@ def text_to_text_response(text_input):
     system = {"role": "system", "content": "You are an AI art thespian assistant."}
     user = {"role":"user", "content":text_input + "and be coherent,latent and write in a script to be acted on stage"}
     try:
-        response = openai.ChatCompletion.create( model="gpt-3.5-turbo-16k", max_tokens=1000, temperature=0.1, messages= [system, user])                                 
+        response = openai.ChatCompletion.create( model="gpt-3.5-turbo-16k", max_tokens=1000, temperature=0.1, messages= [system, user])
+        result = response["choices"][0]["message"]["content"]
+        chathistory.update({text_input:result})
+        return result 
     except Exception as e: 
         return ("Failed to get text response from GPT3.5 API")
         
-    result = response["choices"][0]["message"]["content"]
-    chathistory.update({text_input:result})
-    return result     
+       
 
 # Eleven Labs -- Convert text to speech
 def convert_text_to_speech(result):
