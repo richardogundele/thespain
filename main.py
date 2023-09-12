@@ -9,6 +9,8 @@ from fastapi.responses import StreamingResponse
 from fastapi.middleware.cors import CORSMiddleware
 from apirequests import text_to_text_response, convert_text_to_speech, chat_history
 
+openai.api_key = os.getenv("OPENAI_API_KEY")
+
 origins = [ 
            "https://localhost:5173",
            "hhtps://localhost:5174",
