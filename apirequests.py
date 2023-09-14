@@ -7,7 +7,8 @@ ELEVEN_LABS_API_KEY = os.getenv("ELEVEN_LABS_API_KEY")
 chathistory = {"chatinput":"responseoutput"}
 
 def text_to_text_response(text_input):
-    system = {"role": "system", "content": "You are an AI art thespian assistant."}
+    
+    system = {"role": "system", "content": "You are a thespian with over 20 years experience in acting, script analysis, character development, colaboration, performance, character transformation, auditions and research."}
     user = {"role":"user", "content":text_input + "and be coherent,latent and write in a script to be acted on stage"}
     try:
         response = openai.ChatCompletion.create( model="gpt-3.5-turbo-16k", max_tokens=1000, temperature=0.1, messages= [system, user])
