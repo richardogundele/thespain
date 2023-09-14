@@ -9,7 +9,7 @@ chathistory = {"chatinput":"responseoutput"}
 def text_to_text_response(text_input):
     
     system = {"role": "system", "content": "You are a thespian with over 20 years experience in acting, script analysis, character development, colaboration, performance, character transformation, auditions and research."}
-    user = {"role":"user", "content":text_input + "and be coherent and latent"}
+    user = {"role":"user", "content":text_input + "and be coherent"}
     try:
         response = openai.ChatCompletion.create( model="gpt-3.5-turbo-16k", max_tokens=1500, temperature=0.1, messages= [system, user])
         result = response["choices"][0]["message"]["content"]
