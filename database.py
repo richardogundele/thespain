@@ -1,26 +1,19 @@
+import sqlite3
 
-from pymongo import MongoClient
-import sqlite3, json
+# Connect to the SQLite database
+conn = sqlite3.connect("chat_app.db")
+cursor = conn.cursor()
 
-history = {"richie@gmail.com":{ "hello":"how can i help you", "what is life": "life is good", "how can i stop lieing": "learn to stand for yourself and be a man of integrity"},
-           "bola@gmail.com": {"how can you help me": "I can provide info on art", "what is a script": "a script is what i just mentioned"}}
-
-
-
-connection = sqlite3.connect("chat_history.db")
-cursor = connection.cursor()
+# Create the chat_history table
 cursor.execute("""
     CREATE TABLE IF NOT EXISTS chat_history (
-        email TEXT PRIMARY KEY,
-        chat_history JSON
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        user_email TEXT,
+        text_input TEXT,
+        message TEXT
     )
 """)
 
-for email, chat_data in history.items():
-    cursor.execute("INSERT INTO chat_history (email, chat_history) VALUES (?, ?)",
-                   (email, json.dumps(chat_data)))
-# Commit the changes to the database.
-connection.commit()
-
-cursor.close()
-connection.close()
+# Commit the changes and close the database connection
+conn.commit()
+conn.close()
