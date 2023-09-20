@@ -1,6 +1,6 @@
 import requests, os, openai
 
-openai.api_key = "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"
+openai.api_key = 
 
 ELEVEN_LABS_API_KEY = os.getenv("ELEVEN_LABS_API_KEY")
 
