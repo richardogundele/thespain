@@ -1,23 +1,26 @@
+
 from pymongo import MongoClient
+import sqlite3, json
 
-# Configure MongoDB connection settings
-MONGO_URI = "mongodb://localhost:27017/"
-MONGO_DB_NAME = "richard"  # Replace with your database name
-MONGO_COLLECTION_NAME = "input_data"  # Replace with your collection name
-
-# Create a MongoDB client
-client = MongoClient(MONGO_URI)
-db = client[MONGO_DB_NAME]
-input_collection = db[MONGO_COLLECTION_NAME]
+history = {"richie@gmail.com":{ "hello":"how can i help you", "what is life": "life is good", "how can i stop lieing": "learn to stand for yourself and be a man of integrity"},
+           "bola@gmail.com": {"how can you help me": "I can provide info on art", "what is a script": "a script is what i just mentioned"}}
 
 
-import os
 
-mongodb_uri = os.environ.get("MONGODB_URI")
+connection = sqlite3.connect("chat_history.db")
+cursor = connection.cursor()
+cursor.execute("""
+    CREATE TABLE IF NOT EXISTS chat_history (
+        email TEXT PRIMARY KEY,
+        chat_history JSON
+    )
+""")
 
-if mongodb_uri is None:
-    raise Exception("MONGODB_URI environment variable is not set")
+for email, chat_data in history.items():
+    cursor.execute("INSERT INTO chat_history (email, chat_history) VALUES (?, ?)",
+                   (email, json.dumps(chat_data)))
+# Commit the changes to the database.
+connection.commit()
 
-# Configure MongoDB connection
-client = MongoClient(mongodb_uri)
-
+cursor.close()
+connection.close()

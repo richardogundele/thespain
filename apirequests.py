@@ -1,10 +1,8 @@
-import requests, os, openai, pymongo
+import requests, os, openai
 
 openai.api_key = os.getenv("OPEN_AI_KEY")
 
 ELEVEN_LABS_API_KEY = os.getenv("ELEVEN_LABS_API_KEY")
-
-chathistory = {"chatinput":"responseoutput"}
 
 def text_to_text_response(text_input):
     
@@ -13,13 +11,11 @@ def text_to_text_response(text_input):
     try:
         response = openai.ChatCompletion.create( model="gpt-3.5-turbo-16k", max_tokens=1500, temperature=0.1, messages= [system, user])
         result = response["choices"][0]["message"]["content"]
-        chathistory.update({text_input:result})
+        
         return result 
     except Exception as e: 
         return ("Failed to get text response from GPT3.5 API")
         
-       
-
 # Eleven Labs -- Convert text to speech
 def convert_text_to_speech(result):
   body = {
@@ -48,8 +44,3 @@ def convert_text_to_speech(result):
       return response.content
   else:
     return
-
-def chat_history():
-    for key, value in chathistory.items():
-        print(key, value)
-        print("="*100)

@@ -7,7 +7,8 @@ import openai, os
 from fastapi import FastAPI, File, UploadFile, HTTPException
 from fastapi.responses import StreamingResponse
 from fastapi.middleware.cors import CORSMiddleware
-from apirequests import text_to_text_response, convert_text_to_speech, chat_history
+from apirequests import text_to_text_response, convert_text_to_speech
+from database import history
 
 openai.api_key = os.getenv("OPEN_AI_KEY")
 
@@ -31,14 +32,17 @@ def read_root():
            
 #get history
 @app.post("/history")
-async def history():
-    history = chat_history()
-    return history
+async def chathistory(email):
+  if email in history:
+    print(history[email])
+  else:
+    return
 
 #get text
 @app.post("/text")
 async def post_text(textinput):
     message = text_to_text_response(textinput)
+    history.update({textinput:message})
     return message
 
 #get speech
