@@ -1,16 +1,15 @@
 from typing import Optional
 from fastapi import FastAPI
 app = FastAPI()
-from pydantic import BaseModel
 
-import openai, os, sqlite3, random
+import openai, os, sqlite3
 from fastapi import FastAPI, File, UploadFile, HTTPException
 from fastapi.responses import StreamingResponse
 from fastapi.middleware.cors import CORSMiddleware
 from apirequests import text_to_text_response, convert_text_to_speech
 from database import *
 
-openai.api_key = os.getenv("OPEN_AI_KEY")
+openai.api_key = os.getenv("OPENAI_API_KEY")
 
 origins = [ 
            "https://localhost:5173",
