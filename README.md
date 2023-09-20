@@ -1,9 +1,7 @@
-# Deploy FastAPI on Render
 Use this repo as a template to deploy a Python [FastAPI](https://fastapi.tiangolo.com) service on Render.
 See https://render.com/docs/deploy-fastapi or follow the steps below:
 
-
-# Chat App with FastAPI and SQLite
+# Backend Chat App with FastAPI, GPT-4 and SQLite
 This is a simple chat application built using FastAPI and SQLite. It allows users to interact with a chatbot that responds to text and speech inputs. Conversations are stored in an SQLite database for future reference.
 
 ## Features
