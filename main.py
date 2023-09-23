@@ -33,13 +33,14 @@ def read_root():
 
 #User registration endpoint       
 @app.post("/register")
-async def register_user(email):
+async def register_user(email: str):
     conn = sqlite3.connect("chat_app.db")
     cursor = conn.cursor()
     
     # Check if the email already exists in the database
     cursor.execute("SELECT email FROM users WHERE email=?", (email,))
     existing_email = cursor.fetchone()
+    
     if existing_email:
         # Email already exists, no need to insert it again
         conn.close()
@@ -50,6 +51,7 @@ async def register_user(email):
         conn.commit()
         conn.close()
         return {"message": "User registered successfully"}
+
 
 @app.post("/text")
 async def post_text(email, textinput):
