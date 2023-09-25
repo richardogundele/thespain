@@ -1,3 +1,31 @@
+from typing import Optional
+from fastapi import FastAPI
+app = FastAPI()
+
+
+import openai, os, sqlite3
+from fastapi import FastAPI, File, UploadFile, HTTPException
+from fastapi.responses import StreamingResponse
+from fastapi.middleware.cors import CORSMiddleware
+from openai_gpt4 import text_to_text_response
+from database import export_chat_data_to_jsonl
+
+openai.api_key = os.getenv("OPENAI_API_KEY")
+
+origins = [ 
+           "https://localhost:5173",
+           "hhtps://localhost:5174",
+           "https://localhost:4173",
+           "https://localhost:3000",
+           ]
+
+app.add_middleware( 
+                   CORSMiddleware, 
+                   allow_origins=origins,
+                   allow_credentials=True,
+                   allow_methods=["*"],
+                   allow_headers=["*"],
+                   )
 
 @app.get("/")
 def read_root():
