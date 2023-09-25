@@ -4,8 +4,9 @@ openai.api_key = os.getenv("OPENAI_API_KEY")
 
 ELEVEN_LABS_API_KEY = os.getenv("ELEVEN_LABS_API_KEY")
 
+character = "You are a thespian with over 20 years experience in acting, script analysis, character development, colaboration, performance, character transformation, auditions and research."
 def text_to_text_response(text_input):
-    system = {"role": "system", "content": "You are a thespian with over 20 years experience in acting, script analysis, character development, colaboration, performance, character transformation, auditions and research."}
+    system = {"role": "system", "content": character}
     user = {"role":"user", "content":text_input}
     try:
         response = openai.ChatCompletion.create( model="gpt-4", max_tokens=500, temperature=0.1, messages= [system, user])
@@ -13,7 +14,7 @@ def text_to_text_response(text_input):
         
         return result 
     except Exception as e: 
-        return ("Failed to get text response from GPT3.5 API")
+        return ("Failed to get text response from GPT4 API")
         
 # Eleven Labs -- Convert text to speech
 def convert_text_to_speech(result):
