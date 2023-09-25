@@ -18,7 +18,7 @@ cursor.execute("""
 conn.commit()
 conn.close()
 
-def export_chat_data_to_csv():
+def export_chat_data_to_jsonl():
     try:
         # Connect to the SQLite database
         conn = sqlite3.connect("chat_app.db")
@@ -30,23 +30,33 @@ def export_chat_data_to_csv():
         # Fetch all rows of data
         chat_data = cursor.fetchall()
 
-        # Define the name of the CSV file
-        csv_filename = "chat_data.csv"
+        # Initialize a list to store chat messages
+        chat_messages = []
 
-        # Write the data to a CSV file
-        with open(csv_filename, "w", newline="") as csv_file:
-            # Create a CSV writer
-            csv_writer = csv.writer(csv_file)
+        # Loop through the chat data and format it as chat messages
+        for row in chat_data:
+            user_message = {"role": "user", "content": row[1]}  # Extract prompt
+            assistant_message = {"role": "assistant", "content": row[2]}  # Extract result
+            system_message = {"role": "system", "content": character}
 
-            # Write the header row with the new column names
-            csv_writer.writerow(["user_email", "prompt", "result"])
+            chat_messages.extend([system_message, user_message, assistant_message])
 
-            # Write the chat data
-            csv_writer.writerows(chat_data)
+        # Create a dictionary with the "messages" key
+        chat_output = {"messages": chat_messages}
+
+        # Define the name of the JSONL file
+        jsonl_filename = "chat_data.jsonl"
+
+        # Write the chat messages to a JSONL file
+        with open(jsonl_filename, "w") as jsonl_file:
+            json.dump(chat_output, jsonl_file, indent=4)
 
         # Close the database connection
         conn.close()
-        
-        return {"message": "Data exported to CSV successfully"}
+
+        return {"message": "Data exported to JSONL successfully"}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
+
+# ===============================================================
+
