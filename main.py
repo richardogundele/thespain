@@ -26,6 +26,14 @@ app.add_middleware(
                    allow_methods=["*"],
                    allow_headers=["*"],
                    )
+cursor.execute("""
+    CREATE TABLE IF NOT EXISTS users (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        user_email TEXT,
+        text_input TEXT,
+        message TEXT
+    )
+""")
 
 @app.get("/")
 def read_root():
