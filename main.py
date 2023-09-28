@@ -26,15 +26,6 @@ app.add_middleware(
                    allow_methods=["*"],
                    allow_headers=["*"],
                    )
-cursor.execute("""
-    CREATE TABLE IF NOT EXISTS users (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        user_email TEXT,
-        text_input TEXT,
-        message TEXT
-    )
-""")
-
 @app.get("/")
 def read_root():
     return {"ThespAIn": "/Welcome To ThespAIn Backend Code"}
@@ -44,6 +35,14 @@ def read_root():
 async def get_started(email):
     conn = sqlite3.connect("chat_app.db")
     cursor = conn.cursor()
+    cursor.execute("""
+    CREATE TABLE IF NOT EXISTS users (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        user_email TEXT,
+        text_input TEXT,
+        message TEXT
+    )
+""")   
     # Check if the email already exists in the database
     cursor.execute("SELECT email FROM users WHERE email=?", (email,))
     existing_email = cursor.fetchone()
@@ -102,17 +101,3 @@ async def get_chat_history(email):
 async def trigger_export():
     result = export_chat_data_to_jsonl()
     return result
-
-
-
-# async def post_speech(speech_converted):
-#     chat_response = text_to_text_response(speech_converted)
-#     if not chat_response:
-#         return HTTPException(status_code=400, details="Failure to get chat response")
-#     return chat_response
-    # audio_output = convert_text_to_speech(chat_response)
-    # if not audio_output:
-    #     return HTTPException(status_code=400, detail="failed to get audio")
-    # def iterfile():
-    #     yield audio_output
-    # return StreamingResponse(iterfile(), media_type="application/octet-stream")
