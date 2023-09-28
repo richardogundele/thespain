@@ -1,13 +1,12 @@
-from typing import Optional
-import openai, os, sqlite3, time, datetime
 from mongo import *
+from typing import Optional
+import openai,os, datetime, json
 from fastapi import HTTPException
-from bson import ObjectId  # Import ObjectId from bson module
 from fastapi import FastAPI, File, UploadFile, HTTPException
 from fastapi.responses import StreamingResponse
 from fastapi.middleware.cors import CORSMiddleware
 from apirequests import text_to_text_response
-from database import export_chat_data_to_jsonl
+
 app = FastAPI()
 
 origins = [ 
@@ -25,12 +24,9 @@ app.add_middleware(
                    allow_headers=["*"],
 )
 
-# # Initialize the MongoDB client and database
-# mongo_client = MongoClient(os.getenv("MONGO_URI"))
+mongo_client = MongoClient(os.getenv("MONGO_URI"))
 
-# db = mongo_client["chat_app"]
-
-openai.api_key = "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"
+openai.api_key = os.getenv("OPENAI_API_KEY")
 
 @app.get("/")
 def read_root():
@@ -62,7 +58,6 @@ async def post_text(email, textinput):
         "message": message,
         "timestamp": datetime.datetime.now()
     })
-    
     print("text message posted successfully")
     return message
 
@@ -82,9 +77,6 @@ async def post_speech(email, file: UploadFile = File(...)):
     
     message = text_to_text_response(text_decoded)
     return message
-
-
-
 
 # get history
 @app.get("/history/{email}")
@@ -106,10 +98,15 @@ async def get_chat_history(email: str):
     # Return chat history as a JSON response
     return {"chat_history": chat_history}
 
-
-
 @app.post("/export_for_fine_tuning")
 async def trigger_export():
-    # Implement your export logic here
-    # You can export data to a JSON file or any other desired format
+    collection = db['data'] 
+    cursor = collection.find({})
+    data = list(cursor)
+    # Define the output JSON file path
+    output_json_file = 'finetuning.json' 
+    # Write the data to the JSON file
+    with open(output_json_file, 'w') as json_file:
+        json.dump(data, json_file, default=str)  # 'default=str' helps serialize MongoDB ObjectId to strings
+    print(f'Data exported to {output_json_file}')
     return {"message": "Export triggered successfully"}
