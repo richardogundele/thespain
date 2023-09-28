@@ -1,4 +1,4 @@
-import certifi, pprint
+import certifi, pprint, os
 from pymongo.mongo_client import MongoClient
 
 
