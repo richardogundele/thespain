@@ -1,16 +1,14 @@
 from typing import Optional
-from fastapi import FastAPI
-app = FastAPI()
-
-
-import openai, os, sqlite3
+import openai, os, sqlite3, time, datetime
+from mongo import *
+from fastapi import HTTPException
+from bson import ObjectId  # Import ObjectId from bson module
 from fastapi import FastAPI, File, UploadFile, HTTPException
 from fastapi.responses import StreamingResponse
 from fastapi.middleware.cors import CORSMiddleware
 from apirequests import text_to_text_response
 from database import export_chat_data_to_jsonl
-
-openai.api_key = os.getenv("OPENAI_API_KEY")
+app = FastAPI()
 
 origins = [ 
            "https://localhost:5173",
@@ -25,79 +23,93 @@ app.add_middleware(
                    allow_credentials=True,
                    allow_methods=["*"],
                    allow_headers=["*"],
-                   )
+)
+
+# # Initialize the MongoDB client and database
+# mongo_client = MongoClient(os.getenv("MONGO_URI"))
+
+# db = mongo_client["chat_app"]
+
+openai.api_key = "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"
+
 @app.get("/")
 def read_root():
     return {"ThespAIn": "/Welcome To ThespAIn Backend Code"}
 
-#User registration endpoint       
+# User registration endpoint
 @app.post("/getstarted")
 async def get_started(email):
-    conn = sqlite3.connect("chat_app.db")
-    cursor = conn.cursor()
-    cursor.execute("""
-    CREATE TABLE IF NOT EXISTS users (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        user_email TEXT,
-        text_input TEXT,
-        message TEXT
-    )
-""")   
     # Check if the email already exists in the database
-    cursor.execute("SELECT email FROM users WHERE email=?", (email,))
-    existing_email = cursor.fetchone()
+    existing_user = db.users.find_one({"user_email": email})
     
-    if existing_email:
+    if existing_user:
         # Email already exists, no need to insert it again
-        conn.close()
         return {"message": "User signed in successfully"}
     else:
         # Email doesn't exist, so insert it as a new user
-        cursor.execute("INSERT INTO users(email) VALUES (?)", (email,))
-        conn.commit()
-        conn.close()
+        db.users.insert_one({"user_email": email})
         return {"message": "User registered successfully"}
 
 @app.post("/text")
 async def post_text(email, textinput):
     # Get the response from the OpenAI model
     message = text_to_text_response(textinput)
+    
     # Save the conversation to the database
-    conn = sqlite3.connect("chat_app.db")
-    cursor = conn.cursor()
-    cursor.execute("INSERT INTO chat_history (user_email, text_input, message) VALUES (?, ?, ?)", (email, textinput, message))
-    conn.commit()
-    conn.close()
+    db.chat_history.insert_one({
+        "user_email": email,
+        "text_input": textinput,
+        "message": message,
+        "timestamp": datetime.datetime.now()
+    })
+    
     print("text message posted successfully")
     return message
 
-#get speech
+# get speech
 @app.post("/speech")
-async def post_speech(email, file:UploadFile= File(...)):
+async def post_speech(email, file: UploadFile = File(...)):
     with open(file.filename, "wb") as buffer:
         buffer.write(file.file.read())
+    
     audio_input = open(file.filename, "rb")
     transcript = openai.Audio.transcribe("whisper-1", audio_input)
-    # text_decoded = convert_speech_to_text(audio_input)  
+    
     text_decoded = transcript["text"]
+    
     if not text_decoded:
         raise HTTPException(status_code=400, detail="Failed to decode Audio")
-    else:
-        message = text_to_text_response(text_decoded)
+    
+    message = text_to_text_response(text_decoded)
     return message
-    
-#get history
+
+
+
+
+# get history
 @app.get("/history/{email}")
-async def get_chat_history(email):
-    conn = sqlite3.connect("chat_app.db")
-    cursor = conn.cursor()
-    cursor.execute("SELECT text_input, message FROM chat_history WHERE user_email=?", (email,))
-    chat_history = [{"text_input": row[0], "message":row[1]} for row in cursor.fetchall()]
-    conn.close()
-    trigger_export()
-    return {"chat_history":chat_history}
-    
+async def get_chat_history(email: str):
+    # Find chat history in MongoDB and convert ObjectId to strings
+    chat_history = list(
+        {
+            "_id": str(item["_id"]),  # Convert ObjectId to string
+            "user_email": item["user_email"],
+            "text_input": item["text_input"],
+            "message": item["message"],
+        }
+        for item in db.chat_history.find({"user_email": email})
+    )
+    # Check if chat history is empty and return an HTTPException if necessary
+    if not chat_history:
+        raise HTTPException(status_code=404, detail="Chat history not found")
+
+    # Return chat history as a JSON response
+    return {"chat_history": chat_history}
+
+
+
 @app.post("/export_for_fine_tuning")
 async def trigger_export():
-    result = export_chat_data_to_jsonl()
-    return result
+    # Implement your export logic here
+    # You can export data to a JSON file or any other desired format
+    return {"message": "Export triggered successfully"}
