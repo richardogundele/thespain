@@ -1,10 +1,7 @@
 import certifi, pprint
 from pymongo.mongo_client import MongoClient
 
-username = "richie"
-password = "1ULjTj9f24oHi98K"
 
-uri = f"mongodb+srv://{username}:{password}@cluster0.7zotxnu.mongodb.net/?retryWrites=true&w=majority"
 
 # Create a new client and connect to the server
 # client = MongoClient(uri, server_api=ServerApi('1'))
