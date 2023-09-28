@@ -2,7 +2,7 @@ import certifi, pprint
 from pymongo.mongo_client import MongoClient
 
 
-
+uri = MongoClient(os.getenv("MONGO_URI"))
 # Create a new client and connect to the server
 # client = MongoClient(uri, server_api=ServerApi('1'))
 client = MongoClient(uri, tlsCAFile=certifi.where())
