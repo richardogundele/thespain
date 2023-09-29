@@ -24,8 +24,6 @@ app.add_middleware(
                    allow_headers=["*"],
 )
 
-mongo_client = MongoClient(os.getenv("MONGO_URI"))
-
 openai.api_key = os.getenv("OPENAI_API_KEY")
 
 @app.get("/")
