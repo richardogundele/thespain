@@ -1,15 +1,6 @@
-Use this repo as a template to deploy a Python [FastAPI](https://fastapi.tiangolo.com) service on Render.
-See https://render.com/docs/deploy-fastapi or follow the steps below:
 
-# Backend Chat App with FastAPI, GPT-4 and SQLite
-This is a simple chat application built using FastAPI and SQLite. It allows users to interact with a chatbot that responds to text and speech inputs. Conversations are stored in an SQLite database for future reference.
-
-## Features
-- **Text Chat**: Users can input text messages and receive responses from the chatbot.
-
-- **Speech Input**: Users can send speech inputs, which are converted to text and processed.
-
-- **Chat History**: Conversations are saved in an SQLite database, allowing users to retrieve previous chat history.
+# AI Powered Backend App with FastAPI, GPT-4 and SQLite
+This is an AI powered chat application that leverages on GPT-4 API built using FastAPI and Python. It allows users to interact with a chatbot that responds to text and speech inputs. Conversations are stored in a MongoDB database for future reference and fine tuning of the GPT Model. 
 
 ## Setup
 To run this project, follow these steps:
@@ -26,15 +17,10 @@ To run this project, follow these steps:
   
 4. **Install Dependencies:**
 
-5. **Database Setup:**
-- Create an SQLite database file named `chat_app.db`.
-- Run the database setup script to create the necessary tables:
-  ```  python database_setup.py  ```
-
-6. **Environment Variables:**
+5. **Environment Variables:**
 - Create a `.env` file in the project root and configure any necessary environment variables, such as your OpenAI API key and other settings.
 
-7. **Run the Application:**
+6. **Run the Backend Application:**
 
 8. **Access the App:**
 Open your web browser and go to `http://localhost:8000` to access the chat application.
@@ -52,7 +38,7 @@ This project is licensed under the MIT License. See the [LICENSE](LICENSE) file 
 ## Acknowledgments
 
 - [FastAPI](https://fastapi.tiangolo.com/) - A modern, fast, web framework for building APIs.
-- [SQLite](https://www.sqlite.org/) - A lightweight, embedded relational database.
+- [GPT4]([https://www.sqlite.org](https://platform.openai.com/docs/api-reference/completions/create)/) - GPT 4 API
 
 ## Contributing
 
