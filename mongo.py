@@ -1,15 +1,9 @@
 import certifi, pprint, os
 from pymongo import MongoClient
 
-#mongo_uri = os.getenv("MONGO_URI")
+password = os.getenv("mongopassword")
 
-username = "richie"
-password = "1ULjTj9f24oHi98K"
-
-mongo_uri = f"mongodb+srv://{username}:{password}@cluster0.7zotxnu.mongodb.net/?retryWrites=true&w=majority"
-
-# Create a new client and connect to the server
-# client = MongoClient(mongo_uri, server_api=ServerApi('1'))
+mongo_uri = f"mongodb+srv://richardogundele:{password}@cluster0.jfqn1lj.mongodb.net/?retryWrites=true&w=majority"
 
 client = MongoClient(mongo_uri, tlsCAFile=certifi.where())
 
@@ -20,7 +14,7 @@ client = MongoClient(mongo_uri, tlsCAFile=certifi.where())
 # except Exception as e:
 #     print(e)
 
-db = client.get_database("thespian")   #data
+db = client.get_database("chatapp")  
 
 # client_info = {
 #     "email":"lucianorichard@gmail.com",
@@ -28,6 +22,6 @@ db = client.get_database("thespian")   #data
 #     "completion": "you can find a story in different places"
 # }
 
-# client.thespian.data.insert_one(client_info)
+# client.chatapp.data.insert_one(client_info)
 # d = db.data.find().next()
 # pprint.pprint(d)
