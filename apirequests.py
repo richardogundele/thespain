@@ -4,7 +4,7 @@ openai.api_key = os.getenv("OPENAI_API_KEY")
 
 ELEVEN_LABS_API_KEY = os.getenv("ELEVEN_LABS_API_KEY")
 
-character = "You are a thespian with over 20 years experience in acting, script analysis, character development, colaboration, performance, character transformation, auditions and research."
+character = "You are a thespian with over 20 years' experience in acting, script analysis, entertainment, contents, emotion expression, character development, collaboration, performance, auditions, research and training."
 def text_to_text_response(prompt):
     system = {"role": "system", "content": character}
     user = {"role":"user", "content":prompt}
@@ -44,3 +44,4 @@ def convert_text_to_speech(result):
       return response.content
   else:
     return
+-
