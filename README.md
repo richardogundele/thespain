@@ -1,5 +1,5 @@
 
-# AI Powered Backend App with FastAPI, GPT-4 and SQLite
+# AI Powered Backend App with FastAPI, closed Source GPT-3 and MongoDV
 This is an AI powered chat application that leverages on GPT-4 API built using FastAPI and Python. It allows users to interact with a chatbot that responds to text and speech inputs. Conversations are stored in a MongoDB database for future reference and fine tuning of the GPT Model. 
 
 ## Setup
